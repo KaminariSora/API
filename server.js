@@ -40,11 +40,21 @@ app.get('/api/attractions', function (req, res, next) {
         sql,params,
         function(err, results, fields) {
           console.log(results); // results contains rows returned by server
-          res.json({result: results})
-        //   console.log(fields); // fields contains extra meta data about results, if available
-      
-          // If you execute same statement again, it will be picked from a LRU cache
-          // which will save query preparation time and give better performance
+
+          connection.query(
+            'SELECT COUNT(id) as total FROM attractions',
+            function(err, counts, fields) {
+              const total = counts[0]['total'];
+              const total_pages = Math.ceil(total/per_page);
+              res.json({
+                page: page,
+                per_page: per_page,
+                total: total,
+                total_pages: total_pages,
+                data: results 
+            })
+            }
+          );
         }
       );
 })
