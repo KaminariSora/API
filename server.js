@@ -21,6 +21,7 @@ app.get('/api/attractions', function (req, res, next) {
     const sort_column = req.query.sort_column
     const sort_direction = req.sort_direction
     const search = req.query.search
+    // const searchId = parseInt(req.query.search)
     
     const start_idx = (page-1) * per_page
     let params = []
@@ -29,6 +30,10 @@ app.get('/api/attractions', function (req, res, next) {
         sql += ' WHERE name LIKE ?'
         params.push('%'+search+'%')
     }
+    // if(search) {
+      // sql += ' WHERE id = ?'
+        // params.push(search)
+    // }
     if(sort_column) {
         sql += ' ORDER BY ' + sort_column + ' ' + sort_direction
     }
@@ -51,7 +56,7 @@ app.get('/api/attractions', function (req, res, next) {
                 per_page: per_page,
                 total: total,
                 total_pages: total_pages,
-                data: results 
+                data: results ,
             })
             }
           );
